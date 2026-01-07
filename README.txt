@@ -79,6 +79,6 @@ Example: ./shynthStart.sh -r=G# -s=pentatonic -p=random-melody -t=mellow
 
 ========================================================================
 =                        Developed by Jan Kwinta                       =
-=                    07.01.2026 -- Version 1.01.210                    =
+=                    07.01.2026 -- Version 1.01.220                    =
 =               Latest version on: github.com/KwintaJ/SHYNTH           =
 ========================================================================

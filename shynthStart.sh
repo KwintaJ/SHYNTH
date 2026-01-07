@@ -239,6 +239,7 @@ run_python_synth() {
 
 #######################################
 # MAIN
+clear
 check_environment
 load_config
 parse_args "$@"
