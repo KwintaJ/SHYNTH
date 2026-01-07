@@ -78,10 +78,10 @@ sub get_scale_notes {
 #######################################
 # patterns
 sub gen_pattern {
-    my @notes = get_scale_notes($root, $scale, 4);
+    my @notes = get_scale_notes($root, $scale, 3);
 
     foreach my $n (@notes) {
-        printf("%d %.2f\n", $n, 0.25);
+        printf("%d %.2f\n", $n, 0.5);
     }
 
     # TODO

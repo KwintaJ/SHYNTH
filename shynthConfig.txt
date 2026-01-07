@@ -1,4 +1,4 @@
 root Db
 scale pentatonic
-pattern drone
-tone sine
+pattern arp
+tone saw

@@ -16,6 +16,7 @@ SCALE="major"
 PATTERN="arp"
 TONE="ep"
 TEMP_NOTE_DATA="./.shynthNotes.tmp"
+AUDIO_PLAYER=""
 
 #######################################
 # legal values
@@ -55,6 +56,26 @@ check_environment() {
     else
         rm "$test_file"
     fi
+}
+
+#######################################
+# check which audio player to use
+check_audio_tools() {    
+    if command -v aplay >/dev/null 2>&1; then
+        AUDIO_PLAYER="aplay -r 44100 -f S16_LE -c 1"
+    elif command -v ffplay >/dev/null 2>&1; then
+        AUDIO_PLAYER="ffplay -nodisp -autoexit -f s16le -ar 44100 -ac 1 -i pipe:0"
+    elif command -v sox >/dev/null 2>&1; then
+        AUDIO_PLAYER="play -t raw -r 44100 -e signed-integer -b 16 -c 1 -"
+    else
+        echo "[ERROR] No supported audio player found (aplay, ffplay, or sox)."
+        echo "        Try to nstall any of those audio controllers:"
+        echo "          On Ubuntu/Debian: sudo apt-get install alsa-utils"
+        echo "          On macOS: brew install sox"
+        exit 1
+    fi
+    
+    echo "[INFO] Using: $AUDIO_PLAYER"
 }
 
 #######################################
@@ -173,6 +194,13 @@ run_create_midi() {
     fi
 }
 
+    
+#######################################
+# get python to play sounds   
+run_python_synth() {
+    echo "[INFO] Starting Loop Engine. Press Ctrl+C to stop."
+    python3 ./shynthVoice.py --input="$TEMP_NOTE_DATA" --tone="$TONE" | $AUDIO_PLAYER
+}
 
 #######################################
 # MAIN
@@ -188,4 +216,6 @@ echo "Pattern: $PATTERN"
 echo "Tone:    $TONE"
 echo "--------------------------"
 
+check_audio_tools
 run_create_midi
+run_python_synth
