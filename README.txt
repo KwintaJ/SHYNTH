@@ -72,8 +72,8 @@ Flags for SHYNTH.sh:
     -s: sets scale
     -p: sets pattern
     -o: sets octave
-    -m: sets metronome tempo, default moderato
-    -v: sets volume, default 1
+    -m: sets metronome tempo
+    -v: sets volume
 
 
 
@@ -97,7 +97,7 @@ pattern       [arp, chord, chord7, random-melody, tonics,
                ding, duotones]
                default arp
 
-octave        [0-8]
+octave        [0 - 8]
                default 3
 
 metronome     [adagio, andante, moderato, allegro, vivace, presto]
@@ -111,6 +111,6 @@ volume        [0.1 - 1.9]
 
 ========================================================================
 =                        Developed by Jan Kwinta                       =
-=                    07.01.2026 -- Version 3.02.216                    =
+=                    07.01.2026 -- Version 3.02.226                    =
 =               Latest version on: github.com/KwintaJ/SHYNTH           =
 ========================================================================

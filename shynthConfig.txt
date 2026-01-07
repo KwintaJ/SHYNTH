@@ -1,6 +1,7 @@
+tone mellow
 root Eb
 scale major
 pattern chord7
-tone mellow
 octave 3
-metronome allegro
+metronome andante
+volume 0.9
