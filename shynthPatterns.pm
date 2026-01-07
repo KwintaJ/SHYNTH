@@ -92,7 +92,6 @@ sub play_random_melody {
     my @durations = (0.25 * $tempo, 0.33 * $tempo, 0.5 * $tempo);
 
     for (my $i = 0; $i < 50; $i++) {
-        
         # rest
         my $note_to_play;
         if (rand() < 0.25) {
@@ -118,8 +117,50 @@ sub play_tonics {
     my @note1 = get_scale_notes($root, $scale, $octave - 1);
     my @note2 = get_scale_notes($root, $scale, $octave);
     my @tonics  = ($note1[0], $note2[0]);
-    my $duration = 0.4 * $tempo;
+    my $duration = 1.0 * $tempo;
     return map { "$_ $duration" } @tonics;
+}
+
+sub play_ding {
+    my ($root, $scale, $octave, $tempo) = @_;
+    my @notes = get_scale_notes($root, $scale, $octave + 1);
+    my @output;
+
+    # big amount of silence
+    my $note_duration = 0.2 * $tempo;
+    my $silence_duration = 0.5 * $tempo;
+    for (1..24) {
+        if (rand() < 0.2) {
+            my $note = $notes[int(rand(@notes))];
+            push @output, "$note $note_duration";
+        } else {
+            push @output, "-1 $silence_duration";
+        }
+    }
+    return @output;
+}
+
+sub play_duotones {
+    my ($root, $scale, $octave, $tempo) = @_;
+    my @notes = get_scale_notes($root, $scale, $octave);
+    my @output;
+    
+    my @intervals = (2, 3, 4); 
+
+    my $note_duration = 0.6 * $tempo;
+    my $silence_duration = 0.2 * $tempo;
+    for (1..32) {
+        my $base_idx = int(rand(@notes - 4));
+        my $interval_shift = $intervals[int(rand(@intervals))];
+        
+        my $n1 = $notes[$base_idx];
+        my $n2 = $notes[$base_idx + $interval_shift];
+
+        push @output, "($n1 $n2) $note_duration";
+        
+        push @output, "-1 $silence_duration";
+    }
+    return @output;
 }
 
 1;

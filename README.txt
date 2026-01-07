@@ -49,7 +49,8 @@ root          [C, D, E, F, G, A, B]
 
 scale         [major, minor, dorian, phrygian, lydian, pentatonic]
 
-pattern       [arp, chord, chord7, random-melody, tonics]
+pattern       [arp, chord, chord7, random-melody, tonics,
+               ding, duotones]
 
 octave        [0-8]
 
@@ -71,7 +72,7 @@ Or:
 
 
 To use SHYNTHCHESTRA (SHYNTH Orchestra) and unleash pandemonium:
-    - Run /SHYNTH/SHYNTHCESTRA.sh [-s] from terminal
+    - Run /SHYNTH/SHYNTHCESTRA.sh [-r -s] from terminal
 
 
 
@@ -92,12 +93,12 @@ Example: ./shynthStart.sh -t=mellow -r=G# -s=lydian -p=chord7 -o=3
 
 
 
-SHYNTHCESTRA.sh uses only -s (scale) flag
+SHYNTHCESTRA.sh uses only -r (root) and -s (scale) flags
 
 
 
 ========================================================================
 =                        Developed by Jan Kwinta                       =
-=                    07.01.2026 -- Version 2.02.015                    =
+=                    07.01.2026 -- Version 3.01.002                    =
 =               Latest version on: github.com/KwintaJ/SHYNTH           =
 ========================================================================

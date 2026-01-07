@@ -74,7 +74,13 @@ elsif ($pattern eq "random-melody") {
 }
 elsif ($pattern eq "tonics") {
     @sequence = shynthPatterns::play_tonics($root, $scale, $octave, $metronome_val);
-} 
+}
+elsif ($pattern eq "ding") {
+    @sequence = shynthPatterns::play_ding($root, $scale, $octave, $metronome_val);
+}
+elsif ($pattern eq "duotones") {
+    @sequence = shynthPatterns::play_duotones($root, $scale, $octave, $metronome_val);
+}
 
 foreach my $line (@sequence) {
     print "$line\n";

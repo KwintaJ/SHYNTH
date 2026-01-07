@@ -12,6 +12,30 @@
 # cleanup
 trap cleanup SIGINT SIGTERM EXIT
 
+cleanup() {
+    trap - SIGINT SIGTERM EXIT
+
+    if [[ -f "$TEMP_NOTE_DATA" ]]; then
+        rm -f "$TEMP_NOTE_DATA"
+    fi
+    
+    local pids=$(jobs -p)
+    if [[ -n "$pids" ]]; then
+        kill $pids 2>/dev/null
+    fi
+
+    echo ""
+    echo "SHYNTH was shut down. Goodbye!"
+    exit 0
+}
+
+#######################################
+# help
+usage() {
+    cat README.txt
+    exit 0
+}
+
 #######################################
 # default values
 CONFIG_FILE="shynthConfig.txt"
@@ -22,16 +46,8 @@ TONE="ep"
 OCTAVE=3
 METRONOME="moderato"
 VOLUME=1
-TEMP_NOTE_DATA="./.shynthNotes.tmp"
+TEMP_NOTE_DATA="./.shynthNotes_$$.tmp"
 AUDIO_PLAYER=""
-
-#######################################
-# legal values
-LEGAL_ROOTS=("C" "C#" "Db" "D" "D#" "Eb" "E" "E#" "Fb" "F" "F#" "Gb" "G" "G#" "Ab" "A" "A#" "Bb" "B" "B#" "Cb")
-LEGAL_SCALES=("major" "minor" "dorian" "phrygian" "lydian" "pentatonic")
-LEGAL_PATTERNS=("arp" "chord" "chord7" "random-melody" "tonics")
-LEGAL_TONES=("ep" "mellow" "noisy" "saw" "sine")
-LEGAL_METRONOMES=("adagio" "andante" "moderato" "allegro" "vivace" "presto")
 
 #######################################
 # check permissions, files
@@ -55,15 +71,6 @@ check_environment() {
             exit 1
         fi
     done
-
-    # check touch file
-    local test_file="./.shynth_test"
-    if ! touch "$test_file" 2>/dev/null; then
-        echo "[ERROR] Failed to create a file. Disk full or permission needed."
-        exit 1
-    else
-        rm "$test_file"
-    fi
 }
 
 #######################################
@@ -85,13 +92,6 @@ check_audio_tools() {
         echo "          On macOS: brew install sox"
         exit 1
     fi
-}
-
-#######################################
-# help
-usage() {
-    cat README.txt
-    exit 0
 }
 
 #######################################
@@ -160,7 +160,13 @@ parse_args() {
 }
 
 #######################################
-# two functions for config validation
+# legal values and check
+LEGAL_ROOTS=("C" "C#" "Db" "D" "D#" "Eb" "E" "E#" "Fb" "F" "F#" "Gb" "G" "G#" "Ab" "A" "A#" "Bb" "B" "B#" "Cb")
+LEGAL_SCALES=("major" "minor" "dorian" "phrygian" "lydian" "pentatonic")
+LEGAL_PATTERNS=("arp" "chord" "chord7" "random-melody" "tonics" "ding" "duotones")
+LEGAL_TONES=("ep" "mellow" "noisy" "saw" "sine")
+LEGAL_METRONOMES=("adagio" "andante" "moderato" "allegro" "vivace" "presto")
+
 is_legal() {
     local element=$1
     shift
@@ -217,25 +223,6 @@ validate_settings() {
 }
 
 #######################################
-# cleanup at SIGINT SIGTERM
-cleanup() {
-    trap - SIGINT SIGTERM EXIT
-
-    if [[ -f "$TEMP_NOTE_DATA" ]]; then
-        rm -f "$TEMP_NOTE_DATA"
-    fi
-    
-    local pids=$(jobs -p)
-    if [[ -n "$pids" ]]; then
-        kill $pids 2>/dev/null
-    fi
-
-    echo ""
-    echo "SHYNTH was shut down. Goodbye!"
-    exit 0
-}
-
-#######################################
 # get perl to generate notes
 run_create_midi() {    
     if ! perl ./shynthMIDI.pl --root="$ROOT" --scale="$SCALE" --pattern="$PATTERN" --octave="$OCTAVE" --metronome="$METRONOME" > "$TEMP_NOTE_DATA"; then
@@ -267,8 +254,12 @@ check_environment
 load_config
 parse_args "$@"
 validate_settings
+check_audio_tools
 
-echo "------------ SHYNTH INITIALIZED ------------"
+clear
+echo "--------------------------------------------"
+echo "             SHYNTH INITIALIZED             "
+echo ""
 echo "Root:                 $ROOT"
 echo "Scale:                $SCALE"
 echo "Pattern:              $PATTERN"
@@ -278,6 +269,5 @@ echo "Metronome tempo:      $METRONOME"
 echo "Volume:               $VOLUME"
 echo "--------------------------------------------"
 
-check_audio_tools
 run_create_midi
 run_python_synth
