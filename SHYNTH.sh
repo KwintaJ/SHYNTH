@@ -87,7 +87,7 @@ check_audio_tools() {
         echo "SHYNTH will be using sox audio player."
     else
         echo "[ERROR] No supported audio player found (aplay, ffplay, or sox)."
-        echo "        Try to nstall any of those audio controllers:"
+        echo "        Try to install any of those audio controllers:"
         echo "          On Ubuntu/Debian: sudo apt-get install alsa-utils"
         echo "          On macOS: brew install sox"
         exit 1
