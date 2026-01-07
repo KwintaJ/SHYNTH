@@ -71,6 +71,9 @@ elsif ($pattern eq "chord7") {
 } 
 elsif ($pattern eq "random-melody") {
     @sequence = shynthPatterns::play_random_melody($root, $scale, $octave, $metronome_val);
+}
+elsif ($pattern eq "tonics") {
+    @sequence = shynthPatterns::play_tonics($root, $scale, $octave, $metronome_val);
 } 
 
 foreach my $line (@sequence) {

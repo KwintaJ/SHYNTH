@@ -20,7 +20,7 @@ import re
 #######################################
 # audio
 SAMPLE_RATE = 44100
-AMPLITUDE = 0.5 
+AMPLITUDE = float(0.5) 
 
 #######################################
 # voice engine sample = tone + tines -> adsr
@@ -91,7 +91,7 @@ def generate_chord_chunk(midi_notes, duration, tone_type):
     num_notes = max(1, len(midi_notes))
     for val in mixed_buffer:
         final_val = (val / num_notes) * AMPLITUDE
-        final_val = max(-1.0, min(1.0, final_val))
+        final_val = max(-0.99, min(0.99, final_val))
         output.append(struct.pack('<h', int(final_val * 32767)))
         
     return b"".join(output)
@@ -151,6 +151,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--input", required=True)
     parser.add_argument("--tone", default="ep")
+    parser.add_argument("--volume", default=1.0)
     args = parser.parse_args()
-    
+
+    AMPLITUDE *= float(args.volume)
+
     play_loop(args.input, args.tone)

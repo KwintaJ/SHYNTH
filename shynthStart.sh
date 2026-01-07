@@ -21,6 +21,7 @@ PATTERN="arp"
 TONE="ep"
 OCTAVE=3
 METRONOME="moderato"
+VOLUME=1
 TEMP_NOTE_DATA="./.shynthNotes.tmp"
 AUDIO_PLAYER=""
 
@@ -28,7 +29,7 @@ AUDIO_PLAYER=""
 # legal values
 LEGAL_ROOTS=("C" "C#" "Db" "D" "D#" "Eb" "E" "E#" "Fb" "F" "F#" "Gb" "G" "G#" "Ab" "A" "A#" "Bb" "B" "B#" "Cb")
 LEGAL_SCALES=("major" "minor" "dorian" "phrygian" "lydian" "pentatonic")
-LEGAL_PATTERNS=("arp" "chord" "chord7" "random-melody")
+LEGAL_PATTERNS=("arp" "chord" "chord7" "random-melody" "tonics")
 LEGAL_TONES=("ep" "mellow" "noisy" "saw" "sine")
 LEGAL_METRONOMES=("adagio" "andante" "moderato" "allegro" "vivace" "presto")
 
@@ -108,6 +109,7 @@ load_config() {
                 tone)      TONE="$value" ;;
                 octave)    OCTAVE="$value" ;;
                 metronome) METRONOME="$value" ;;
+                volume)    VOLUME="$value" ;;
             esac
         done < "$CONFIG_FILE"
     fi
@@ -143,6 +145,10 @@ parse_args() {
                 ;;
             -m=*)
                 METRONOME="${1#*=}"
+                shift
+                ;;
+            -v=*)
+                VOLUME="${1#*=}"
                 shift
                 ;;
             *)
@@ -192,11 +198,16 @@ validate_settings() {
 
     if ! [[ "$OCTAVE" =~ ^[0-8]$ ]]; then
         echo "[ERROR] Invalid octave: $OCTAVE. Use range 0-8."
-        exit 1
+        ((errors++))
     fi
 
     if ! is_legal "$METRONOME" "${LEGAL_METRONOMES[@]}"; then
         echo "[ERROR] Invalid metronome tempo: $METRONOME. Use one of: ${LEGAL_METRONOMES[*]}"
+        ((errors++))
+    fi
+
+    if ! [[ $VOLUME =~ ^(0\.[1-9][0-9]*|1\.[0-9][0-9]*|1)$ ]]; then
+        echo "[ERROR] Invalid volume: $VOLUME. Use range 0.1 - 1.9"
         ((errors++))
     fi
 
@@ -244,7 +255,7 @@ run_create_midi() {
 # get python to play sounds   
 run_python_synth() {
     echo "Starting Loop Engine. Press Ctrl+C to stop."
-    ( python3 ./shynthVoice.py --input="$TEMP_NOTE_DATA" --tone="$TONE" | $AUDIO_PLAYER 2>/dev/null) &
+    ( python3 ./shynthVoice.py --input="$TEMP_NOTE_DATA" --tone="$TONE" --volume="$VOLUME" | $AUDIO_PLAYER 2>/dev/null) &
     MAIN_PID=$!
 
     wait $MAIN_PID 2>/dev/null
@@ -252,7 +263,6 @@ run_python_synth() {
 
 #######################################
 # MAIN
-clear
 check_environment
 load_config
 parse_args "$@"
@@ -265,6 +275,7 @@ echo "Pattern:              $PATTERN"
 echo "Tone:                 $TONE"
 echo "Octave:               $OCTAVE"
 echo "Metronome tempo:      $METRONOME"
+echo "Volume:               $VOLUME"
 echo "--------------------------------------------"
 
 check_audio_tools

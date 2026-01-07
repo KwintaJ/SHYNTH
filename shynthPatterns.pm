@@ -113,4 +113,13 @@ sub play_random_melody {
     return @output;
 }
 
+sub play_tonics {
+    my ($root, $scale, $octave, $tempo) = @_;
+    my @note1 = get_scale_notes($root, $scale, $octave - 1);
+    my @note2 = get_scale_notes($root, $scale, $octave);
+    my @tonics  = ($note1[0], $note2[0]);
+    my $duration = 0.4 * $tempo;
+    return map { "$_ $duration" } @tonics;
+}
+
 1;
