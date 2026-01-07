@@ -1,7 +1,7 @@
-tone mellow
-root Eb
-scale major
-pattern chord7
+tone ep
+root C
+scale pentatonic
+pattern arp
 octave 3
-metronome andante
-volume 0.9
+metronome moderato
+volume 1.0
