@@ -15,6 +15,7 @@ ROOT="C"
 SCALE="major"
 PATTERN="arp"
 TONE="ep"
+TEMP_NOTE_DATA="./.shynthNotes.tmp"
 
 #######################################
 # legal values
@@ -113,7 +114,6 @@ parse_args() {
     done
 }
 
-
 #######################################
 # two functions for config validation
 is_legal() {
@@ -156,6 +156,23 @@ validate_settings() {
     fi
 }
 
+#######################################
+# get perl to generate notes
+run_create_midi() {
+    echo "[INFO] Generating melodic data"
+    
+    if ! perl ./shynthMIDI.pl --root="$ROOT" --scale="$SCALE" --pattern="$PATTERN" > "$TEMP_NOTE_DATA"; then
+        echo "[ERROR] Perl script failed to generate notes"
+        exit 2
+    fi
+
+    # check if note file empty
+    if [[ ! -s "$TEMP_NOTE_DATA" ]]; then
+        echo "[ERROR] Note data file is empty - Perl error"
+        exit 3
+    fi
+}
+
 
 #######################################
 # MAIN
@@ -164,7 +181,6 @@ load_config
 parse_args "$@"
 validate_settings
 
-
 echo "--- SHYNTH INITIALIZED ---"
 echo "Root:    $ROOT"
 echo "Scale:   $SCALE"
@@ -172,4 +188,4 @@ echo "Pattern: $PATTERN"
 echo "Tone:    $TONE"
 echo "--------------------------"
 
-# TODO
+run_create_midi
