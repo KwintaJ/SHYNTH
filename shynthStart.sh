@@ -64,10 +64,13 @@ check_environment() {
 check_audio_tools() {    
     if command -v aplay >/dev/null 2>&1; then
         AUDIO_PLAYER="aplay -r 44100 -f S16_LE -c 1"
+        echo "[INFO] Using aplay audio player"
     elif command -v ffplay >/dev/null 2>&1; then
         AUDIO_PLAYER="ffplay -nodisp -autoexit -f s16le -ar 44100 -ac 1 -i pipe:0"
+        echo "[INFO] Using ffplay audio player"
     elif command -v sox >/dev/null 2>&1; then
         AUDIO_PLAYER="play -t raw -r 44100 -e signed-integer -b 16 -c 1 -"
+        echo "[INFO] Using sox audio player"
     else
         echo "[ERROR] No supported audio player found (aplay, ffplay, or sox)."
         echo "        Try to nstall any of those audio controllers:"
@@ -75,8 +78,6 @@ check_audio_tools() {
         echo "          On macOS: brew install sox"
         exit 1
     fi
-    
-    echo "[INFO] Using: $AUDIO_PLAYER"
 }
 
 #######################################

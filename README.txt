@@ -59,7 +59,7 @@ Or:
 #### FLAGS ####
 ---------------
 
--h (help): prints this file
+-h --help: prints this file
 
 -r: sets root of a scale, default C
 
@@ -79,6 +79,6 @@ Example: ./shynthStart.sh -r=G# -s=pentatonic -p=random-melody -t=mellow
 
 ========================================================================
 =                        Developed by Jan Kwinta                       =
-=                    07.01.2026 -- Version 1.01.102                    =
+=                    07.01.2026 -- Version 1.01.200                    =
 =               Latest version on: github.com/KwintaJ/SHYNTH           =
 ========================================================================
