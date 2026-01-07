@@ -67,22 +67,22 @@ echo "▙▖▙▖▐    ▐ ▌▌▙▖   ▄▌▌▌▐ ▌▝▌▐ ▌▌�
 echo ""                                        
 
 # bass
-./shynthStart.sh -t=noisy -r=$ROOT -s=$SCALE -p=tonics -o=3 -m=adagio -v=0.2 1>/dev/null &
+./SHYNTH.sh -t=noisy -r=$ROOT -s=$SCALE -p=tonics -o=3 -m=adagio -v=0.2 1>/dev/null &
 
 # melody
-./shynthStart.sh -t=ep -r=$ROOT -s=$SCALE -p=random-melody -o=3 -m=allegro -v=1.5 1>/dev/null &
+./SHYNTH.sh -t=ep -r=$ROOT -s=$SCALE -p=random-melody -o=3 -m=allegro -v=1.5 1>/dev/null &
 
 # arp
-./shynthStart.sh -t=sine -r=$ROOT -s=$SCALE -p=arp -o=4 -m=vivace -v=0.4 1>/dev/null &
+./SHYNTH.sh -t=sine -r=$ROOT -s=$SCALE -p=arp -o=4 -m=vivace -v=0.4 1>/dev/null &
 
 # chord7
-./shynthStart.sh -t=mellow -r=$ROOT -s=$SCALE -p=chord7 -o=3 -m=adagio -v=1.1 1>/dev/null &
+./SHYNTH.sh -t=mellow -r=$ROOT -s=$SCALE -p=chord7 -o=3 -m=adagio -v=1.1 1>/dev/null &
 
 # ding
-./shynthStart.sh -t=saw -r=$ROOT -s=$SCALE -p=ding -o=4 -m=andante -v=0.1 1>/dev/null &
+./SHYNTH.sh -t=saw -r=$ROOT -s=$SCALE -p=ding -o=4 -m=andante -v=0.1 1>/dev/null &
 
 # duotones
-./shynthStart.sh -t=ep -r=$ROOT -s=$SCALE -p=duotones -o=4 -m=presto -v=0.7 1>/dev/null &
+./SHYNTH.sh -t=ep -r=$ROOT -s=$SCALE -p=duotones -o=4 -m=presto -v=0.7 1>/dev/null &
 
 echo "    SHYNTHCHESTRA is playing! Press Ctrl+C to stop."
 wait

@@ -15,6 +15,8 @@
 ========================================================================
 
 
+
+########################################################################
 #### INSTALLATION ####
 ----------------------
 Be sure to have all those files in one directory:
@@ -23,82 +25,92 @@ Be sure to have all those files in one directory:
         │
         ├─ /README.txt (this file)
         │
+        ├─ /SHYNTH.sh
+        │
         ├─ /SHYNTHCHESTRA.sh
         │
-        ├─ /shynthStart.sh
-        │
-        ├─ /shynthConfig.txt
-        │
-        ├─ /shynthVoice.py
+        ├─ /shynthNotes.pl
         │
         ├─ /shynthPatterns.pm
         │
-        └─ /shynthMIDI.pl
+        ├─ /shynthVoice.py
+        │
+        └─ /shynthConfig.txt
 
 
 
-#### CONFIGURATION ####
------------------------
-
-You can edit shynthConfig.txt file to change shynth's properties:
-
-tone          [ep (electric piano), mellow, noisy, saw, sine]
-
-root          [C, D, E, F, G, A, B]
-              (with sharps # or flats b)
-
-scale         [major, minor, dorian, phrygian, lydian, pentatonic]
-
-pattern       [arp, chord, chord7, random-melody, tonics,
-               ding, duotones]
-
-octave        [0-8]
-
-metronome     [adagio, andante, moderato, allegro, vivace, presto]
-              (slowest to fastest)
-
-volume        [0.1 - 1.9]
-
-
-
+########################################################################
 #### USAGE ####
 ---------------
-
-To use SHYNTH as a solo voice either:
-    - With shynthConfig.txt present and set up run shynthStart.sh file
-Or:
-    - Run /SHYNTH/shynthStart.sh [FLAGS] from terminal
-
-
-
 To use SHYNTHCHESTRA (SHYNTH Orchestra) and unleash pandemonium:
-    - Run /SHYNTH/SHYNTHCESTRA.sh [-r -s] from terminal
+    - Run /SHYNTH/SHYNTHCESTRA.sh [FLAGS] from terminal
+
+Example: ./SHYNTHCESTRA.sh -r=Eb -s=pentatonic
+
+
+---------------
+To use SHYNTH as a solo voice:
+    - Run /SHYNTH/SHYNTH.sh [FLAGS] from terminal
+
+Example: ./SHYNTH.sh -t=mellow -r=G# -s=lydian -p=chord7 -o=3
 
 
 
+########################################################################
 #### FLAGS ####
 ---------------
-Flags for shynthStart.sh:
+Flags for SHYNTHCESTRA.sh:
+    -r: sets root of a scale
+    -s: sets scale
 
+
+---------------
+Flags for SHYNTH.sh:
     -h --help: prints this file
-    -t: sets tone, default ep (electric piano)
-    -r: sets root of a scale, default C
-    -s: sets scale, default major
-    -p: sets pattern, default arp
-    -o: sets octave, default 3
+    -t: sets tone
+    -r: sets root of a scale
+    -s: sets scale
+    -p: sets pattern
+    -o: sets octave
     -m: sets metronome tempo, default moderato
     -v: sets volume, default 1
 
-Example: ./shynthStart.sh -t=mellow -r=G# -s=lydian -p=chord7 -o=3
 
 
+########################################################################
+#### CONFIGURATION ####
+-----------------------
+To change SHYNTH's properties you can use flags or
+edit shynthConfig.txt file
 
-SHYNTHCESTRA.sh uses only -r (root) and -s (scale) flags
+
+tone          [ep (electric piano), mellow, noisy, saw, sine]
+               default ep
+
+root          [C, D, E, F, G, A, B] (with sharps # or flats b) 
+               default C
+
+scale         [major, minor, dorian, phrygian, lydian, pentatonic]
+               default major
+
+pattern       [arp, chord, chord7, random-melody, tonics,
+               ding, duotones]
+               default arp
+
+octave        [0-8]
+               default 3
+
+metronome     [adagio, andante, moderato, allegro, vivace, presto]
+              (slowest to fastest) default moderato
+
+volume        [0.1 - 1.9]
+               default 1.0
+
 
 
 
 ========================================================================
 =                        Developed by Jan Kwinta                       =
-=                    07.01.2026 -- Version 3.01.002                    =
+=                    07.01.2026 -- Version 3.02.216                    =
 =               Latest version on: github.com/KwintaJ/SHYNTH           =
 ========================================================================

@@ -46,7 +46,7 @@ TONE="ep"
 OCTAVE=3
 METRONOME="moderato"
 VOLUME=1
-TEMP_NOTE_DATA="./.shynthNotes_$$.tmp"
+TEMP_NOTE_DATA="./.shynthNotesData_$$.tmp"
 AUDIO_PLAYER=""
 
 #######################################
@@ -60,7 +60,7 @@ check_environment() {
     fi
 
     # check for shynth components
-    local scripts=("shynthMIDI.pl" "shynthVoice.py")
+    local scripts=("shynthNotes.pl" "shynthVoice.py")
     for s in "${scripts[@]}"; do
         if [[ ! -f "$s" ]]; then
             echo "[ERROR] Missing component: $s"
@@ -225,7 +225,7 @@ validate_settings() {
 #######################################
 # get perl to generate notes
 run_create_midi() {    
-    if ! perl ./shynthMIDI.pl --root="$ROOT" --scale="$SCALE" --pattern="$PATTERN" --octave="$OCTAVE" --metronome="$METRONOME" > "$TEMP_NOTE_DATA"; then
+    if ! perl ./shynthNotes.pl --root="$ROOT" --scale="$SCALE" --pattern="$PATTERN" --octave="$OCTAVE" --metronome="$METRONOME" > "$TEMP_NOTE_DATA"; then
         echo "[ERROR] Perl script failed to generate notes"
         exit 2
     fi
