@@ -59,23 +59,24 @@ sub play_arp {
     return map { "$_ 0.2" } @sequence;
 }
 
-sub play_drone {
-    my ($root, $scale, $octave) = @_;
-    my @notes = get_scale_notes($root, $scale, $octave);
-    return (
-        "$notes[0] 4.0",
-        ($notes[0]+7) . " 4.0"
-    );
-}
-
 sub play_chord {
     my ($root, $scale, $octave) = @_;
-    my @notes = get_scale_notes($root, $scale, $octave);
-    return (
-        "$notes[0] 0.5",
-        "$notes[2] 0.5",
-        "$notes[4] 0.5"
-    );
+    my @scale_notes = get_scale_notes($root, $scale, $octave);
+    my @chord_notes = ($scale_notes[0], $scale_notes[2], $scale_notes[4]);
+    return "(" . join(" ", @chord_notes) . ") 10.0";
+}
+
+sub play_chord7 {
+    my ($root, $scale, $octave) = @_;
+    my @scale_notes = get_scale_notes($root, $scale, $octave);
+    my @chord_notes;
+    if ($scale ne "pentatonic") {
+        @chord_notes = ($scale_notes[0], $scale_notes[2], $scale_notes[4], $scale_notes[6]);
+    }
+    else {
+        @chord_notes = ($scale_notes[0], $scale_notes[2], $scale_notes[3], $scale_notes[4]);
+    }
+    return "(" . join(" ", @chord_notes) . ") 10.0";
 }
 
 sub play_random_melody {

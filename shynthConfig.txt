@@ -1,5 +1,5 @@
-root Db
-scale pentatonic
-pattern arp
-tone saw
+root Eb
+scale major
+pattern chord7
+tone mellow
 octave 4

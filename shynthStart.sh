@@ -15,6 +15,7 @@ trap cleanup SIGINT SIGTERM EXIT
 #######################################
 # default values
 CONFIG_FILE="shynthConfig.txt"
+MIDI_FILE="_"
 ROOT="C"
 SCALE="major"
 PATTERN="arp"
@@ -27,8 +28,8 @@ AUDIO_PLAYER=""
 # legal values
 LEGAL_ROOTS=("C" "C#" "Db" "D" "D#" "Eb" "E" "E#" "Fb" "F" "F#" "Gb" "G" "G#" "Ab" "A" "A#" "Bb" "B" "B#" "Cb")
 LEGAL_SCALES=("major" "minor" "dorian" "phrygian" "lydian" "pentatonic")
-LEGAL_PATTERNS=("arp" "drone" "chord" "random-melody")
-LEGAL_TONES=("ep" "sharp" "mellow" "noisy" "saw" "sine")
+LEGAL_PATTERNS=("arp" "chord" "chord7" "random-melody")
+LEGAL_TONES=("ep" "mellow" "noisy" "saw" "sine")
 
 #######################################
 # check permissions, files
@@ -100,10 +101,12 @@ load_config() {
             [[ -z "$key" || "$key" == "#"* ]] && continue
             
             case "$key" in
+                midi)    MIDI_FILE="$value" ;;
                 root)    ROOT="$value" ;;
                 scale)   SCALE="$value" ;;
                 pattern) PATTERN="$value" ;;
                 tone)    TONE="$value" ;;
+                octave)  OCTAVE="$value" ;;
             esac
         done < "$CONFIG_FILE"
     fi
@@ -116,6 +119,10 @@ parse_args() {
         case "$1" in
             -h|--help)
                 usage
+                ;;
+            --midi=*)
+                MIDI_FILE="${1#*=}"
+                shift
                 ;;
             -r=*)
                 ROOT="${1#*=}"
@@ -213,8 +220,8 @@ cleanup() {
 
 #######################################
 # get perl to generate notes
-run_create_midi() {    
-    if ! perl ./shynthMIDI.pl --root="$ROOT" --scale="$SCALE" --pattern="$PATTERN" --octave="$OCTAVE" > "$TEMP_NOTE_DATA"; then
+run_create_midi() {  
+    if ! perl ./shynthMIDI.pl --root="$ROOT" --scale="$SCALE" --pattern="$PATTERN" --octave="$OCTAVE" --midi="$MIDI_FILE" > "$TEMP_NOTE_DATA"; then
         echo "[ERROR] Perl script failed to generate notes"
         exit 2
     fi
@@ -245,12 +252,20 @@ load_config
 parse_args "$@"
 validate_settings
 
-echo "--- SHYNTH INITIALIZED ---"
-echo "Root:    $ROOT"
-echo "Scale:   $SCALE"
-echo "Pattern: $PATTERN"
-echo "Tone:    $TONE"
-echo "--------------------------"
+if [[ "$MIDI_FILE" == "_" ]] ; then
+    echo "--- SHYNTH INITIALIZED ---"
+    echo "Root:    $ROOT"
+    echo "Scale:   $SCALE"
+    echo "Pattern: $PATTERN"
+    echo "Tone:    $TONE"
+    echo "Octave:  $OCTAVE"
+    echo "--------------------------"
+else
+    echo "--- SHYNTH INITIALIZED ---"
+    echo "Tone:    $TONE"
+    echo "SHYNTH will play MIDI file"
+    echo "--------------------------"
+fi
 
 check_audio_tools
 run_create_midi
