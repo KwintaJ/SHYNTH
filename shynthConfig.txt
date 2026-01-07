@@ -1,0 +1,4 @@
+root D#
+scale minor
+pattern drone
+tone sine
