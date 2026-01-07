@@ -9,6 +9,10 @@
 #!/bin/bash
 
 #######################################
+# cleanup
+trap cleanup SIGINT SIGTERM EXIT
+
+#######################################
 # default values
 CONFIG_FILE="shynthConfig.txt"
 ROOT="C"
@@ -64,13 +68,13 @@ check_environment() {
 check_audio_tools() {    
     if command -v aplay >/dev/null 2>&1; then
         AUDIO_PLAYER="aplay -r 44100 -f S16_LE -c 1"
-        echo "[INFO] Using aplay audio player"
+        echo "SHYNTH will be using aplay audio player."
     elif command -v ffplay >/dev/null 2>&1; then
         AUDIO_PLAYER="ffplay -nodisp -autoexit -f s16le -ar 44100 -ac 1 -i pipe:0"
-        echo "[INFO] Using ffplay audio player"
+        echo "SHYNTH will be using ffplay audio player."
     elif command -v sox >/dev/null 2>&1; then
         AUDIO_PLAYER="play -t raw -r 44100 -e signed-integer -b 16 -c 1 -"
-        echo "[INFO] Using sox audio player"
+        echo "SHYNTH will be using sox audio player."
     else
         echo "[ERROR] No supported audio player found (aplay, ffplay, or sox)."
         echo "        Try to nstall any of those audio controllers:"
@@ -189,10 +193,27 @@ validate_settings() {
 }
 
 #######################################
-# get perl to generate notes
-run_create_midi() {
-    echo "[INFO] Generating melodic data"
+# cleanup at SIGINT SIGTERM
+cleanup() {
+    trap - SIGINT SIGTERM EXIT
+
+    if [[ -f "$TEMP_NOTE_DATA" ]]; then
+        rm -f "$TEMP_NOTE_DATA"
+    fi
     
+    local pids=$(jobs -p)
+    if [[ -n "$pids" ]]; then
+        kill $pids 2>/dev/null
+    fi
+
+    echo ""
+    echo "SHYNTH was shut down. Goodbye!"
+    exit 0
+}
+
+#######################################
+# get perl to generate notes
+run_create_midi() {    
     if ! perl ./shynthMIDI.pl --root="$ROOT" --scale="$SCALE" --pattern="$PATTERN" --octave="$OCTAVE" > "$TEMP_NOTE_DATA"; then
         echo "[ERROR] Perl script failed to generate notes"
         exit 2
@@ -209,8 +230,11 @@ run_create_midi() {
 #######################################
 # get python to play sounds   
 run_python_synth() {
-    echo "[INFO] Starting Loop Engine. Press Ctrl+C to stop."
-    python3 ./shynthVoice.py --input="$TEMP_NOTE_DATA" --tone="$TONE" | $AUDIO_PLAYER
+    echo "Starting Loop Engine. Press Ctrl+C to stop."
+    ( python3 ./shynthVoice.py --input="$TEMP_NOTE_DATA" --tone="$TONE" | $AUDIO_PLAYER 2>/dev/null) &
+    MAIN_PID=$!
+
+    wait $MAIN_PID 2>/dev/null
 }
 
 #######################################
