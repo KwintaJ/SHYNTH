@@ -1,4 +1,4 @@
-root D#
-scale minor
+root Db
+scale pentatonic
 pattern drone
 tone sine

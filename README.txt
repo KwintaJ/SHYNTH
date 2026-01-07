@@ -37,7 +37,7 @@ Be sure to have all those files in one directory:
 -----------------------
 You can edit shynthConfig.txt file to change shynth's properties:
 
-root          [C, C#, D, D#, E, F, F#, G, G#, A, A#, B]
+root          [C, D, E, F, G, A, B (with sharps # or flats b)]
 scale         [major, minor, dorian, phrygian, lydian, pentatonic]
 pattern       [arp, drone, chord, random-melody]
 tone          [ep, sharp, mellow, noisy, saw, sine]
@@ -74,6 +74,6 @@ Example: ./shynthStart.sh -r=G# -s=pentatonic -p=random-melody -t=mellow
 
 ========================================================================
 =                        Developed by Jan Kwinta                       =
-=                    07.01.2026 -- Version 0.02.000                    =
+=                    07.01.2026 -- Version 0.02.100                    =
 =               Latest version on: github.com/KwintaJ/SHYNTH           =
 ========================================================================
