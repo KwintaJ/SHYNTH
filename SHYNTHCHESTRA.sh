@@ -68,18 +68,23 @@ echo ""
 
 # bass
 ./SHYNTH.sh -t=noisy -r=$ROOT -s=$SCALE -p=tonics -o=3 -m=adagio -v=0.2 1>/dev/null &
+sleep 0.05
 
 # melody
 ./SHYNTH.sh -t=ep -r=$ROOT -s=$SCALE -p=random-melody -o=3 -m=allegro -v=1.5 1>/dev/null &
+sleep 0.05
 
 # arp
 ./SHYNTH.sh -t=sine -r=$ROOT -s=$SCALE -p=arp -o=4 -m=vivace -v=0.4 1>/dev/null &
+sleep 0.05
 
 # chord7
 ./SHYNTH.sh -t=mellow -r=$ROOT -s=$SCALE -p=chord7 -o=3 -m=adagio -v=1.1 1>/dev/null &
+sleep 0.05
 
 # ding
 ./SHYNTH.sh -t=saw -r=$ROOT -s=$SCALE -p=ding -o=4 -m=andante -v=0.1 1>/dev/null &
+sleep 0.05
 
 # duotones
 ./SHYNTH.sh -t=ep -r=$ROOT -s=$SCALE -p=duotones -o=4 -m=presto -v=0.7 1>/dev/null &
