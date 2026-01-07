@@ -63,27 +63,8 @@ class VoiceEngine:
         env = VoiceEngine.get_adsr(i, total, 0.05, 0.1, 0.5, 0.4)
         return (wave + noise) * env
 
-def generate_sample(freq, duration, tone_type):
-    num_samples = int(duration * SAMPLE_RATE)
-    output = []
-    
-    tones = {
-        "ep": VoiceEngine.tone_ep,
-        "mellow": VoiceEngine.tone_mellow,
-        "noisy": VoiceEngine.tone_noisy,
-        "saw": lambda f, t, i, tot: 2.0 * (t * f - math.floor(0.5 + t * f)) * VoiceEngine.get_adsr(i, tot, 0.05, 0.05, 0.8, 0.1),
-        "sine": lambda f, t, i, tot: math.sin(2 * math.pi * f * t) * VoiceEngine.get_adsr(i, tot, 0.1, 0.1, 0.8, 0.1)
-    }
-    
-    selected_tone = tones.get(tone_type, tones["sine"])
-
-    for i in range(num_samples):
-        t = i / SAMPLE_RATE
-        sample = selected_tone(freq, t, i, num_samples) * AMPLITUDE
-        output.append(struct.pack('<h', int(max(-1, min(1, sample)) * 32767)))
-    
-    return b"".join(output)
-
+#######################################
+# generate chunk of sound with given notes
 def generate_chord_chunk(midi_notes, duration, tone_type):
     num_samples = int(duration * SAMPLE_RATE)
     mixed_buffer = [0.0] * num_samples
@@ -99,7 +80,8 @@ def generate_chord_chunk(midi_notes, duration, tone_type):
 
     for midi_note in midi_notes:
         freq = midi_to_hz(midi_note)
-        if freq <= 0: continue
+        if freq is None:
+            continue
         
         for i in range(num_samples):
             t = i / SAMPLE_RATE
@@ -124,6 +106,9 @@ def handle_broken_pipe():
 #######################################
 # midi to Hz
 def midi_to_hz(midi_note):
+    if midi_note == -1:
+        return None
+
     return 440.0 * (2.0 ** ((midi_note - 69) / 12.0))
 
 #######################################

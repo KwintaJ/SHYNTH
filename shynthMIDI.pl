@@ -13,7 +13,6 @@ use warnings;
 use Getopt::Long;
 
 use lib '.'; 
-use MIDItoSHYNTH;
 use shynthPatterns;
 
 #######################################
@@ -22,45 +21,56 @@ my $root;
 my $scale;
 my $pattern;
 my $octave;
-my $midi_file_input;
+my $metronome;
 
 #######################################
 # args from shynthStart
 GetOptions(
-    "root=s"            => \$root,
-    "scale=s"           => \$scale,
-    "pattern=s"         => \$pattern,
-    "octave=i"          => \$octave,
-    "midi=s"            => \$midi_file_input
+    "root=s"       => \$root,
+    "scale=s"      => \$scale,
+    "pattern=s"    => \$pattern,
+    "octave=i"     => \$octave,
+    "metronome=s"  => \$metronome,
 );
+
+#######################################
+# tempo select
+my $metronome_val;
+
+if ($metronome eq "adagio") {
+    $metronome_val = 2
+}
+elsif ($metronome eq "andante") {
+    $metronome_val = 1.45
+}
+elsif ($metronome eq "moderato") {
+    $metronome_val = 1
+}
+elsif ($metronome eq "allegro") {
+    $metronome_val = 0.9
+}
+elsif ($metronome eq "vivace") {
+    $metronome_val = 0.7
+}
+elsif ($metronome eq "presto") {
+    $metronome_val = 0.55
+}
 
 #######################################
 # generate notes
 my @sequence;
 
-if ($midi_file_input ne "_") {
-    if (-e $midi_file_input && -f $midi_file_input) {
-        if (-s $midi_file_input > 0) {
-            print STDERR "[INFO] Importing MIDI file: $midi_file_input\n";
-            @sequence = MIDItoSHYNTH::convert_midi_to_shynth($midi_file_input);
-        } else {
-            die "[ERROR] MIDI file '$midi_file_input' is empty.\n";
-        }
-    } else {
-        die "[ERROR] MIDI file '$midi_file_input' not found.\n";
-    }
-}
-elsif ($pattern eq "arp") {
-    @sequence = shynthPatterns::play_arp($root, $scale, $octave);
+if ($pattern eq "arp") {
+    @sequence = shynthPatterns::play_arp($root, $scale, $octave, $metronome_val);
 } 
 elsif ($pattern eq "chord") {
-    @sequence = shynthPatterns::play_chord($root, $scale, $octave);
+    @sequence = shynthPatterns::play_chord($root, $scale, $octave, $metronome_val);
 } 
 elsif ($pattern eq "chord7") {
-    @sequence = shynthPatterns::play_chord7($root, $scale, $octave);
+    @sequence = shynthPatterns::play_chord7($root, $scale, $octave, $metronome_val);
 } 
 elsif ($pattern eq "random-melody") {
-    @sequence = shynthPatterns::play_random_melody($root, $scale, $octave);
+    @sequence = shynthPatterns::play_random_melody($root, $scale, $octave, $metronome_val);
 } 
 
 foreach my $line (@sequence) {

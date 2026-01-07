@@ -53,21 +53,23 @@ sub get_scale_notes {
 #######################################
 # patterns
 sub play_arp {
-    my ($root, $scale, $octave) = @_;
+    my ($root, $scale, $octave, $tempo) = @_;
     my @notes = get_scale_notes($root, $scale, $octave);
     my @sequence = (@notes, reverse @notes[1..$#notes-1]);
-    return map { "$_ 0.2" } @sequence;
+    my $duration = 0.12 * $tempo;
+    return map { "$_ $duration" } @sequence;
 }
 
 sub play_chord {
-    my ($root, $scale, $octave) = @_;
+    my ($root, $scale, $octave, $tempo) = @_;
     my @scale_notes = get_scale_notes($root, $scale, $octave);
     my @chord_notes = ($scale_notes[0], $scale_notes[2], $scale_notes[4]);
-    return "(" . join(" ", @chord_notes) . ") 10.0";
+    my $duration = 10.0 * $tempo;
+    return "(" . join(" ", @chord_notes) . ") " . $duration;
 }
 
 sub play_chord7 {
-    my ($root, $scale, $octave) = @_;
+    my ($root, $scale, $octave, $tempo) = @_;
     my @scale_notes = get_scale_notes($root, $scale, $octave);
     my @chord_notes;
     if ($scale ne "pentatonic") {
@@ -76,19 +78,38 @@ sub play_chord7 {
     else {
         @chord_notes = ($scale_notes[0], $scale_notes[2], $scale_notes[3], $scale_notes[4]);
     }
-    return "(" . join(" ", @chord_notes) . ") 10.0";
+    my $duration = 10.0 * $tempo;
+    return "(" . join(" ", @chord_notes) . ") " . $duration;
 }
 
 sub play_random_melody {
-    my ($root, $scale, $octave) = @_;
-    my @notes = get_scale_notes($root, $scale, $octave);
-    my @output;
-    my $pos = int(rand(@notes));
+    my ($root, $scale, $octave, $tempo) = @_;
+    my @notes_low  = get_scale_notes($root, $scale, $octave);
+    my @notes_high = get_scale_notes($root, $scale, $octave + 1);
+    my @all_notes  = (@notes_low, @notes_high);
     
-    for (1..16) {
-        $pos = ($pos + (int(rand(3)) - 1)) % scalar(@notes);
-        push @output, "$notes[$pos] 0.25";
+    my @output;
+    my @durations = (0.25 * $tempo, 0.33 * $tempo, 0.5 * $tempo);
+
+    for (my $i = 0; $i < 50; $i++) {
+        
+        # rest
+        my $note_to_play;
+        if (rand() < 0.25) {
+            $note_to_play = -1;
+        } else {
+            if (rand() < 0.20) {
+                $note_to_play = $all_notes[0];
+            } else {
+                $note_to_play = $all_notes[int(rand(@all_notes))];
+            }
+        }
+        
+        my $d_idx = int(rand(@durations));    
+        my $line = sprintf("%d %.2f", $note_to_play, $durations[$d_idx]);
+        push @output, $line;
     }
+    
     return @output;
 }
 

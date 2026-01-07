@@ -31,8 +31,6 @@ Be sure to have all those files in one directory:
         │
         ├─ /shynthPatterns.pm
         │
-        ├─ /MIDItoSHYNTH.pm
-        │
         └─ /shynthMIDI.pl
 
 
@@ -41,13 +39,19 @@ Be sure to have all those files in one directory:
 -----------------------
 You can edit shynthConfig.txt file to change shynth's properties:
 
-root          [C, D, E, F, G, A, B (with sharps # or flats b)]
+tone          [ep (electric piano), mellow, noisy, saw, sine]
+
+root          [C, D, E, F, G, A, B]
+              (with sharps # or flats b)
+
 scale         [major, minor, dorian, phrygian, lydian, pentatonic]
+
 pattern       [arp, chord, chord7, random-melody]
+
 octave        [0-8]
 
-tone          [ep, mellow, noisy, saw, sine]
-midi          [filename](plays .mid file; overwrites root, scale, pattern, octave)
+metronome     [adagio, andante, moderato, allegro, vivace, presto]
+              (slowest to fastest)
 
 #### USAGE ####
 ---------------
@@ -65,8 +69,6 @@ Or:
 
 -t: sets tone, default ep (electric piano)
 
---midi: plays .mid file; overwrites -r, -s, -p, -o
-
 -r: sets root of a scale, default C
 
 -s: sets scale, default major
@@ -75,14 +77,16 @@ Or:
 
 -o: sets octave, default 3
 
+-m: sets metronome tempo, default moderato
 
 
-Example: ./shynthStart.sh -r=G# -s=pentatonic -p=random-melody -t=mellow
+
+Example: ./shynthStart.sh -t=mellow -r=G# -s=lydian -p=chord7 -o=3
 
 
 
 ========================================================================
 =                        Developed by Jan Kwinta                       =
-=                    07.01.2026 -- Version 1.02.115                    =
+=                    07.01.2026 -- Version 2.01.000                    =
 =               Latest version on: github.com/KwintaJ/SHYNTH           =
 ========================================================================
