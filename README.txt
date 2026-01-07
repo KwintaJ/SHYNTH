@@ -29,6 +29,8 @@ Be sure to have all those files in one directory:
         │
         ├─ /shynthVoice.py
         │
+        ├─ /shynthPatterns.pm
+        │
         └─ /shynthMIDI.pl
 
 
@@ -41,6 +43,7 @@ root          [C, D, E, F, G, A, B (with sharps # or flats b)]
 scale         [major, minor, dorian, phrygian, lydian, pentatonic]
 pattern       [arp, drone, chord, random-melody]
 tone          [ep, sharp, mellow, noisy, saw, sine]
+octave        [0-8]
 
 
 
@@ -66,6 +69,8 @@ Or:
 
 -t: sets tone, default ep (electric piano)
 
+-o: sets octave, default 3
+
 
 
 Example: ./shynthStart.sh -r=G# -s=pentatonic -p=random-melody -t=mellow
@@ -74,6 +79,6 @@ Example: ./shynthStart.sh -r=G# -s=pentatonic -p=random-melody -t=mellow
 
 ========================================================================
 =                        Developed by Jan Kwinta                       =
-=                    07.01.2026 -- Version 0.03.102                    =
+=                    07.01.2026 -- Version 1.01.102                    =
 =               Latest version on: github.com/KwintaJ/SHYNTH           =
 ========================================================================

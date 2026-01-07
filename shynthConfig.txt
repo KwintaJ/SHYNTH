@@ -2,3 +2,4 @@ root Db
 scale pentatonic
 pattern arp
 tone saw
+octave 4

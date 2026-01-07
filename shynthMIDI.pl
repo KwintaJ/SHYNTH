@@ -12,81 +12,42 @@ use strict;
 use warnings;
 use Getopt::Long;
 
+use lib '.'; 
+use shynthPatterns;
+
 #######################################
-# config
-my $root = "C";
-my $scale = "major";
-my $pattern = "arp";
-my $bpm = 120;
+# vars
+my $root;
+my $scale;
+my $pattern;
+my $octave;
 
 #######################################
 # args from shynthStart
 GetOptions(
-    "root=s" => \$root,
-    "scale=s" => \$scale,
+    "root=s"    => \$root,
+    "scale=s"   => \$scale,
     "pattern=s" => \$pattern,
+    "octave=i"  => \$octave,
 );
 
 #######################################
-# notes to midi
-my %note_map = (
-    'C'  => 0,
-    'C#' => 1,
-    'Db' => 1,
-    'D'  => 2,
-    'D#' => 3,
-    'Eb' => 3,
-    'E'  => 4,
-    'E#'  => 5,
-    'Fb'  => 4,
-    'F'  => 5,
-    'F#' => 6,
-    'Gb' => 6,
-    'G'  => 7,
-    'G#' => 8,
-    'Ab' => 8,
-    'A'  => 9,
-    'A#' => 10,
-    'Bb' => 10,
-    'B'  => 11,
-    'B#'  => 0,
-    'Cb'  => 11
-);
+# generate MIDI
+my @sequence;
 
-#######################################
-# scales definitions
-my %scales = (
-    'major'      => [0, 2, 4, 5, 7, 9, 11],
-    'minor'      => [0, 2, 3, 5, 7, 8, 10],
-    'dorian'     => [0, 2, 3, 5, 7, 9, 10],
-    'phrygian'   => [0, 1, 3, 5, 7, 8, 10],
-    'lydian'     => [0, 2, 4, 6, 7, 9, 11],
-    'pentatonic' => [0, 2, 4, 7, 9],
-);
+if ($pattern eq "arp") {
+    @sequence = shynthPatterns::play_arp($root, $scale, $octave);
+} 
+elsif ($pattern eq "drone") {
+    @sequence = shynthPatterns::play_drone($root, $scale, $octave);
+} 
+elsif ($pattern eq "chord") {
+    @sequence = shynthPatterns::play_chord($root, $scale, $octave);
+} 
+elsif ($pattern eq "random-melody") {
+    @sequence = shynthPatterns::play_random_melody($root, $scale, $octave);
+} 
 
-#######################################
-# scale generation
-sub get_scale_notes {
-    my ($root_name, $scale_name, $octave) = @_;
-    my $root_offset = $note_map{$root_name} + (($octave + 1) * 12);
-    my @intervals = @{$scales{$scale_name}};
-    
-    my @midi_notes = map { $root_offset + $_ } @intervals;
-    return @midi_notes;
+foreach my $line (@sequence) {
+    print "$line\n";
 }
-
-#######################################
-# patterns
-sub gen_pattern {
-    my @notes = get_scale_notes($root, $scale, 3);
-
-    foreach my $n (@notes) {
-        printf("%d %.2f\n", $n, 0.5);
-    }
-
-    # TODO
-}
-
-#######################################
-# MAIN
-gen_pattern();

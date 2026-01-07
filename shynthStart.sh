@@ -15,6 +15,7 @@ ROOT="C"
 SCALE="major"
 PATTERN="arp"
 TONE="ep"
+OCTAVE=3
 TEMP_NOTE_DATA="./.shynthNotes.tmp"
 AUDIO_PLAYER=""
 
@@ -127,6 +128,10 @@ parse_args() {
                 TONE="${1#*=}"
                 shift
                 ;;
+            -o=*)
+                OCTAVE="${1#*=}"
+                shift
+                ;;
             *)
                 echo "[ERROR] Unknown argument: $1"
                 exit 1
@@ -172,6 +177,11 @@ validate_settings() {
         ((errors++))
     fi
 
+    if ! [[ "$OCTAVE" =~ ^[0-8]$ ]]; then
+        echo "[ERROR] Invalid octave: $OCTAVE. Use range 0-8."
+        exit 1
+    fi
+
     if [[ $errors > 0 ]]; then
         exit 1
     fi
@@ -182,7 +192,7 @@ validate_settings() {
 run_create_midi() {
     echo "[INFO] Generating melodic data"
     
-    if ! perl ./shynthMIDI.pl --root="$ROOT" --scale="$SCALE" --pattern="$PATTERN" > "$TEMP_NOTE_DATA"; then
+    if ! perl ./shynthMIDI.pl --root="$ROOT" --scale="$SCALE" --pattern="$PATTERN" --octave="$OCTAVE" > "$TEMP_NOTE_DATA"; then
         echo "[ERROR] Perl script failed to generate notes"
         exit 2
     fi
