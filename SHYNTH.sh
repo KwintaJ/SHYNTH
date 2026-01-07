@@ -40,7 +40,7 @@ usage() {
 # default values
 CONFIG_FILE="shynthConfig.txt"
 ROOT="C"
-SCALE="major"
+SCALE="pentatonic"
 PATTERN="arp"
 TONE="ep"
 OCTAVE=3

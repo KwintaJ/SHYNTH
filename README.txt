@@ -91,7 +91,7 @@ root          [C, D, E, F, G, A, B] (with sharps # or flats b)
                default C
 
 scale         [major, minor, dorian, phrygian, lydian, pentatonic]
-               default major
+               default pentatonic
 
 pattern       [arp, chord, chord7, random-melody, tonics,
                ding, duotones]
@@ -111,6 +111,6 @@ volume        [0.1 - 1.9]
 
 ========================================================================
 =                        Developed by Jan Kwinta                       =
-=                    07.01.2026 -- Version 3.02.226                    =
+=                    07.01.2026 -- Version 3.02.301                    =
 =               Latest version on: github.com/KwintaJ/SHYNTH           =
 ========================================================================

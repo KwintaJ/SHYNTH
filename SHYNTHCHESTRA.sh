@@ -30,7 +30,7 @@ usage() {
 #######################################
 # default values
 ROOT="C"
-SCALE="major"
+SCALE="pentatonic"
 
 #######################################
 # parse flags
