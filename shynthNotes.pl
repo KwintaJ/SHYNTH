@@ -80,6 +80,9 @@ elsif ($pattern eq "ding") {
 elsif ($pattern eq "duotones") {
     @sequence = shynthPatterns::play_duotones($root, $scale, $octave, $metronome_val);
 }
+else {
+    @sequence = shynthPatterns::play_arp("C", "pentatonic", 3, "moderato");
+}
 
 foreach my $line (@sequence) {
     print "$line\n";
