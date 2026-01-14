@@ -16,11 +16,11 @@ use shynthPatterns;
 
 #######################################
 # vars
-my $root;
-my $scale;
-my $pattern;
-my $octave;
-my $metronome;
+my $root = "C";
+my $scale = "pentatonic";
+my $pattern = "arp";
+my $octave = 3;
+my $metronome = "moderato";
 
 #######################################
 # args from shynthStart
@@ -37,22 +37,22 @@ GetOptions(
 my $metronome_val;
 
 if ($metronome eq "adagio") {
-    $metronome_val = 2
+    $metronome_val = 2;
 }
 elsif ($metronome eq "andante") {
-    $metronome_val = 1.45
+    $metronome_val = 1.45;
 }
 elsif ($metronome eq "moderato") {
-    $metronome_val = 1
+    $metronome_val = 1;
 }
 elsif ($metronome eq "allegro") {
-    $metronome_val = 0.9
+    $metronome_val = 0.9;
 }
 elsif ($metronome eq "vivace") {
-    $metronome_val = 0.7
+    $metronome_val = 0.7;
 }
 elsif ($metronome eq "presto") {
-    $metronome_val = 0.55
+    $metronome_val = 0.55;
 }
 
 #######################################
